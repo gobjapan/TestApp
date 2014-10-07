@@ -8,6 +8,7 @@ package testapp;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -86,9 +87,23 @@ public class TestApp {
         StringJoiner sj = new StringJoiner(":", "[", "]");
         names.stream().forEach(s -> sj.add(s));
         System.out.println(sj.toString());//1行で書けないか
-        
+
+        //math
         System.out.println(names2.stream().collect(Collectors.summingLong(s -> s.length())));
-        
+        System.out.println(names2.stream().mapToInt(s -> s.length()).sum());
+
+        //list
+        List<String> converted = names.stream()
+                .filter(s -> s.length() > 5)
+                .map(s -> "(" + s + ")")
+                .collect(Collectors.toList());
+        System.out.println(converted);
+        names.stream()
+                .collect(Collectors.groupingBy(s -> s.length()))
+                .forEach((k,v) -> System.out.println(k + ":" + v));
+        Map<Integer, List<String>> map = names.stream()
+                .collect(Collectors.groupingBy(s -> s.length()));
+
         System.out.println(methodName + ":end ----------------");
     }
     
