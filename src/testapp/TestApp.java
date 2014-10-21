@@ -5,7 +5,13 @@
  */
 package testapp;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -56,29 +62,26 @@ public class TestApp {
     private static void hatenaSample(){
         //http://d.hatena.ne.jp/nowokay/20130504
         hatenaSample1();
-        hatenaSample2();
+        hatenaSample2_File();
         hatenaSample3();
     }
     
     private static void hatenaSample1(){
-        String name = new Throwable().getStackTrace()[0].getMethodName();
-        List<String> names = Arrays.asList("hoge hoge", "foo bar", "naoki", "kishida");
-        names.stream()
-                .map(s -> name + "-1: [" + s + "]")
-                .filter(s -> s.length() > 5)
-                .forEach(System.out::println);
-        names.stream()
-                .filter(s -> s.length() > 5)
-                .map(s -> name + "-2: [" + s + "]")
-                .forEach(System.out::println);
-    }
-    
-    private static void hatenaSample2(){
         String methodName = new Throwable().getStackTrace()[0].getMethodName();
-        List<String> names = Arrays.asList("hoge hoge", "foo bar", "naoki", "kishida");
-        List<String> names2 = Arrays.asList("12", "3 5");
         
         System.out.println(methodName + ":start ----------------");
+        
+        List<String> names = Arrays.asList("hoge hoge", "foo bar", "naoki", "kishida");
+        names.stream()
+                .map(s -> "[" + s + "]")
+                .filter(s -> s.length() > 5)
+                .forEach(System.out::println);
+        names.stream()
+                .filter(s -> s.length() > 5)
+                .map(s -> "[" + s + "]")
+                .forEach(System.out::println);
+        
+        List<String> names2 = Arrays.asList("12", "3 5");
         System.out.println(names.stream().allMatch(s -> !s.isEmpty())); //true
         System.out.println(names.stream().anyMatch(s -> s.length() > 7)); //true
         System.out.println(names.stream().noneMatch(s -> s.startsWith("A"))); //true
@@ -107,7 +110,39 @@ public class TestApp {
         System.out.println(methodName + ":end ----------------");
     }
     
+    private static void hatenaSample2_File(){
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+        //todo:デリゲート的なの試したい:methodName＋start／endの出力でくくる
+        
+        System.out.println(methodName + ":start ----------------");        
+
+        String path="C:\\Users\\GOB\\Documents\\NetBeansProjects\\TestApp\\text\\lines.txt";
+        try(FileReader fr = new FileReader(path);
+            BufferedReader br = new BufferedReader(fr))
+        {
+            br.lines().limit(3)
+                    .forEach(System.out::println);
+        }catch(IOException ex){}
+        try{
+            Files.readAllLines(Paths.get(path), Charset.defaultCharset())
+                    .stream()
+                    //.filter(n -> n % 2 == 0)//todo://奇数行だけ出力したい
+                    .limit(3)
+                    .forEach(System.out::println);
+        }catch(IOException ex){}
+        
+        System.out.println(methodName + ":end ----------------");
+    }
+    
     private static void hatenaSample3(){
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+        //todo:デリゲート的なの試したい:methodName＋start／endの出力でくくる
+        
+        System.out.println(methodName + ":start ----------------");        
+
+        
+        
+        System.out.println(methodName + ":end ----------------");
     }
     
     public static void colorSample(){
